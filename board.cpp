@@ -34,6 +34,7 @@ class board
       void print();
       bool isBlank(int, int);
       ValueType getCell(int, int);
+      void setCell(int, int, int);
       
    private:
 
@@ -106,6 +107,15 @@ ValueType board::getCell(int i, int j)
       throw rangeError("bad value in getCell");
 }
 
+void board::setCell(int i, int j, int num)
+{
+      if(num < 10 && num >= -1)
+      {
+            value[i][j] = num;
+            return;
+      }
+}
+
 bool board::isBlank(int i, int j)
 // Returns true if cell i,j is blank, and false otherwise.
 {
@@ -153,7 +163,7 @@ int main()
    ifstream fin;
    
    // Read the sample grid from the file.
-   string fileName = "sudoku.txt";
+   string fileName = "sudoku1.txt";
 
    fin.open(fileName.c_str());
    if (!fin)
@@ -170,7 +180,7 @@ int main()
       {
 	 b1.initialize(fin);
 	 b1.print();
-	 b1.printConflicts();
+//	 b1.printConflicts();
       }
    }
    catch  (indexRangeError &ex)

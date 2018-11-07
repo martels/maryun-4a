@@ -1,48 +1,9 @@
-// Declarations and functions for project #4
 
-#include <iostream>
-#include <limits.h>
-#include "d_matrix.h"
-#include "d_except.h"
-#include <list>
-#include <fstream>
+
+#include "board.h"
 
 using namespace std;
 
-typedef int ValueType; // The type of the value in a cell
-const int Blank = -1;  // Indicates that a cell is blank
- 
-const int SquareSize = 3;  //  The number of cells in a small square
-                           //  (usually 3).  The board has
-                           //  SquareSize^2 rows and SquareSize^2
-                           //  columns.
-
-const int BoardSize = SquareSize * SquareSize;
-
-const int MinValue = 1;
-const int MaxValue = 9;
-
-int numSolutions = 0;
-
-class board
-// Stores the entire Sudoku board
-{
-   public:
-      board(int);
-      void clear();
-      void initialize(ifstream &fin);
-      void print();
-      bool isBlank(int, int);
-      ValueType getCell(int, int);
-      void setCell(int, int, int);
-      
-   private:
-
-      // The following matrices go from 1 to BoardSize in each
-      // dimension, i.e., they are each (BoardSize+1) * (BoardSize+1)
-
-      matrix<ValueType> value;
-};
 
 board::board(int sqSize)
    : value(BoardSize+1,BoardSize+1)
@@ -107,15 +68,6 @@ ValueType board::getCell(int i, int j)
       throw rangeError("bad value in getCell");
 }
 
-void board::setCell(int i, int j, int num)
-{
-      if(num < 10 && num >= -1)
-      {
-            value[i][j] = num;
-            return;
-      }
-}
-
 bool board::isBlank(int i, int j)
 // Returns true if cell i,j is blank, and false otherwise.
 {
@@ -157,6 +109,93 @@ void board::print()
    cout << "-";
    cout << endl;
 }
+
+bool isSolved()
+{
+      matrix rows[9][9], squares[9][9], columns[9][9];
+      int arows, asquares, acolumns;
+      int temp = 0;
+
+      //set matrices to 0
+      for(int i = 0, i < 9, i++)
+      {
+            for(int j = 0, j < 9, j++)
+            {
+                  rows[i][j] = 0;
+                  squares[i][j] = 0;
+                  columns[i][j] = 0;
+            }
+      }
+
+      //count the number of times a number apears in a row
+      for(int i = 0, i < 9, i++)
+      {
+            for(int j = 0, j < 9, j++)
+            {
+                  temp = value[i][j];
+                  rows[i][temp-1] = rows[i][temp-1] + 1;
+            }
+      }
+
+      //count the number of times a number appears in a square
+      for(int i = 0; i < 9; i = i + 3)
+      {
+            for(int j = i, j < (i + 2); j++)
+            {
+                  for(int k = i, k < (i + 2); k++)
+                  {
+                        temp = value[j][k];
+                        squares[i][temp - 1] = squares[i][temp - 1] + 1;
+                  }
+            }
+      }
+
+      for(int i = 0, i < 9, i++)
+      {
+            for(int j = 0, j < 9, j++)
+            {
+                  temp = value[j][i];
+                  columns[i][temp-1] = columns[i][temp-1] + 1;
+            }
+      }
+
+void clearUpdate(int, int, int)
+{
+
+}
+
+void addUpdate(int, int, int)
+{
+
+}
+
+void updateConflicts()
+{
+
+}
+
+void printConflicts()
+{
+
+}
+
+void board::setCell(int i, int j, int num)
+{
+      if(num < 10 && num >= -1)
+      {
+            value[i][j] = num;
+            return;
+      }
+}
+
+
+
+
+
+
+
+
+
 
 int main()
 {

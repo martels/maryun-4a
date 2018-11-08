@@ -36,6 +36,7 @@ class board
       bool isBlank(int, int);
       ValueType getCell(int, int);
 
+      void conflicts();
       bool isSolved();
       void clearUpdate(int, int, int);
       void addUpdate(int, int, int);
@@ -47,8 +48,10 @@ class board
  
       // The following matrices go from 1 to BoardSize in each
       // dimension, i.e., they are each (BoardSize+1) * (BoardSize+1)
-
+      bool flag;
+      matrix<ValueType> rows[9][9], squares[9][9], columns[9][9];
       matrix<ValueType> value;
+      matrix<ValueType> OriginalBoard;
 };
 
 #endif

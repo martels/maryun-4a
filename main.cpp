@@ -25,9 +25,14 @@ int main()
     {
       b1.initialize(fin);
       b1.printOriginal();
-      b1.setCell(3,3,3);
+        b1.setCell(3,3,3);
       b1.print();
- //     b1.addUpdate(3, 3, 3);
+        b1.addUpdate(3, 3, 3);
+        b1.addUpdate(4,4,2);
+        b1.addUpdate(4,5,2);
+        b1.clearUpdate(4, 4);
+        b1.clearUpdate(4, 5);
+        b1.clearUpdate(3,1);
       b1.printConflicts();
     }
   }

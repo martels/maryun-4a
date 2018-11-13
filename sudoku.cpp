@@ -10,6 +10,7 @@ board::board(int sqSize)
 // Board constructor
 {
   clear();
+    conflictflag = true;
 }
 
 void board::clear()
@@ -59,6 +60,7 @@ ostream &operator<<(ostream &ostr, vector<int> &v)
   for (int i = 0; i < v.size(); i++)
     ostr << v[i] << " ";
   cout << endl;
+    return ostr;
 }
 
 ValueType board::getCell(int i, int j)
@@ -177,62 +179,63 @@ bool board::conflicts()
   for (int i = 1; i <= BoardSize; i++)
     for (int j = 1; j <= BoardSize; j++)
     {
-      temp = value[i][j];
-      rows[i][temp - 1] = rows[i][temp - 1] + 1;
 
-      temp = value[j][i];
-      columns[i][temp - 1] = columns[i][temp - 1] + 1;
+        temp = value[i][j];
+        rows[i][temp] = rows[i][temp] + 1;
+        
+        int sqNum = squareNumber(i,j);
+        squares[sqNum][temp] = squares[sqNum][temp] +1;
+        
+
+        temp = value[j][i];
+        columns[i][temp] = columns[i][temp] + 1;
     }
 
-  // count the number of times a number appears in a square
-  for (int i = 1; i <= BoardSize; i++)
-    for (int j = 1; j <= BoardSize; j++)
-      for (int k = i; k < (i + 2); k++)
-      {
-        temp = value[j][k];
-        squares[i][temp - 1] = squares[i][temp - 1] + 1;
-      }
 
-  for (int i = 1; i <= BoardSize; i++)
+    for (int i = 1; i <= BoardSize; i++)
     for (int j = 1; j <= BoardSize; j++)
     {
-      if (rows[i][j] != 1 || squares[i][j] != 1 || columns[i][j] != 1)
+      if (rows[i][j] > 1 || squares[i][j] > 1 || columns[i][j] > 1)
       {
-        this->conflictflag = false;
+          
+          this->conflictflag = false;
       }
     }
+    return conflictflag;
 }
 
 void board::printConflicts()
 // updates conflict matrices, prints the board as it stands and prints the
 // conflicts found
 {
-  conflicts();
-  print();
-  if (!conflictflag)
+    conflicts();
+    print();
+    if (!conflictflag)
   {
   for (int i = 1; i <= BoardSize; i++)
     for (int j = 1; j <= BoardSize; j++)
       {
         if (rows[i][j] >= 2)
         {
-          cout << "Conflict! More than one '" << (j + 1) << "' in row "
-               << (i + 1);
+          cout << "Conflict! More than one '" << j << "' in row "
+            << i << endl;
         }
 
         if (squares[i][j] >= 2)
         {
-          cout << "Conflict! More than one '" << (j + 1) << "' in square "
-               << (i + 1);
+          cout << "Conflict! More than one '" << j << "' in square "
+               << i << endl;
         }
 
         if (columns[i][j] >= 2)
         {
-          cout << "Conflict! More than one '" << (j + 1) << "' in column "
-               << (i + 1);
+          cout << "Conflict! More than one '" << j << "' in column "
+               << i << endl;
         }
       }
   }
+    else
+        cout << "No conflicts\n";
 }
 
 bool board::isSolved()
@@ -245,7 +248,7 @@ void board::clearUpdate(int i, int j)
 {
   if (original[i][j] == Blank)
   {
-    value[i][j] == Blank;
+    value[i][j] = Blank;
   }
 
   conflicts();
